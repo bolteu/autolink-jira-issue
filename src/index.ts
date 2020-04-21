@@ -7,7 +7,7 @@ interface Options {
 }
 
 const prBodyIssuesReplaceRegex = new RegExp(
-  '[//]:s?#s?(autolink_jira_issues_start)[sS]+[//]:s?#s?(autolink_jira_issues_end)',
+  '\[\/\/]:\s?#\s?\(autolink_jira_issues_start\)[\s\S]+\[\/\/\]:\s?#\s?\(autolink_jira_issues_end\)',
   'gm',
 );
 
