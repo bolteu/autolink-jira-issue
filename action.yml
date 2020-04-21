@@ -1,0 +1,29 @@
+name: 'Complete release'
+description: 'Complete release'
+inputs:
+  github-token:  # id of input
+    description: 'Github api token if you want to fetch private repo'
+    required: true
+    default: ''
+  github-user-name:
+    description: 'Github user name'
+    required: false
+    default: ''
+  github-user-email:
+    description: 'Github user email'
+    required: false
+    default: null
+  should-tag-base-branch:
+    description: 'Tag base branch after merging. If `tag` parameter is not set - will use version from package.json'
+    required: false
+    default: ''
+  tag:
+    description: 'If `should-tag-base-branch` is set - will use this as tag.  If this parameter is not set - will use version from package.json'
+    required: false
+    default: ''
+outputs:
+  time: # id of output
+    description: 'The time we greeted you'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
