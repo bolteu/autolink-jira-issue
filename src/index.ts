@@ -63,6 +63,10 @@ async function run() {
 
     const time = new Date().toTimeString();
     core.setOutput('time', time);
+
+    throw {
+      message: 'Dummy restart',
+    };
   } catch (error) {
     core.setFailed(error.message);
   }
