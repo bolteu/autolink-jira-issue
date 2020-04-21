@@ -6,10 +6,7 @@ interface Options {
   issueBaseUrl: string;
 }
 
-const prBodyIssuesReplaceRegex = new RegExp(
-  '\[\/\/]:\s?#\s?\(autolink_jira_issues_start\)[\s\S]+\[\/\/\]:\s?#\s?\(autolink_jira_issues_end\)',
-  'gm',
-);
+const prBodyIssuesReplaceRegex = /\[\/\/]:\s?#\s?\(autolink_jira_issues_start\)[\s\S]+\[\/\/\]:\s?#\s?\(autolink_jira_issues_end\)/gm;
 
 const extractIssuesKeysFromBranch = (prBranchName: string, options: Options) => {
   const [_prefix, _description, ...jiraIssues] = prBranchName.split('/');
@@ -27,6 +24,7 @@ function autolinkIssues(prBranchName: string, prBody: string | undefined, option
   const issuesLinks = issuesKeys.map((issueKey) => createIssueLink(issueKey, options.issueBaseUrl));
   const issuesLinksFormatted = issuesLinks.join('\n');
 
+  console.log(issuesLinksFormatted);
   return prBody.replace(prBodyIssuesReplaceRegex, issuesLinksFormatted);
 }
 
