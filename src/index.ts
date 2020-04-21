@@ -32,6 +32,7 @@ function autolinkIssues(prBranchName: string, prBody: string | undefined, option
 
 async function run() {
   try {
+    core.info(`${github.context.payload.pull_request}`);
     if (!github.context.payload.pull_request) {
       throw {
         message: 'This action can only be executed from PR or Issue',
