@@ -32,7 +32,6 @@ function autolinkIssues(prBranchName: string, prBody: string | undefined, option
 
 async function run() {
   try {
-    console.log(`${github.context.payload.pull_request}`);
     if (!github.context.payload.pull_request) {
       throw {
         message: 'This action can only be executed from PR or Issue',
@@ -45,18 +44,21 @@ async function run() {
     const pullRquestBranchName = github.context.payload.pull_request.head.ref;
     const pullRequestBody = github.context.payload.pull_request?.body;
 
+    console.log(pullRequestBody);
+    const newBody = autolinkIssues(pullRquestBranchName, pullRequestBody, { issuePrefix, issueBaseUrl });
+    console.log(newBody);
+
     const updateRequest = {
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       pull_number: github.context.payload.pull_request.number,
-      body: autolinkIssues(pullRquestBranchName, pullRequestBody, { issuePrefix, issueBaseUrl }),
+      body: newBody,
     };
 
     const client = new github.GitHub(githubApiToken);
     // @ts-ignore
     const response = await client.pulls.update(updateRequest);
 
-    core.info(`response: ${response}`);
     if (response.status !== 200) {
       core.error('Updating pull request has failed');
     }
