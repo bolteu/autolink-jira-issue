@@ -23,8 +23,7 @@ function autolinkIssues(prBranchName: string, prBody: string | undefined, option
   const issuesLinks = issuesKeys.map((issueKey) => createIssueLink(issueKey, options.issueBaseUrl));
   const issuesLinksFormatted = issuesLinks.join('\n');
 
-  console.log(issuesLinksFormatted);
-  return prBody.replace(prBodyIssuesReplaceRegex, issuesLinksFormatted);
+  return prBody.replace(prBodyIssuesReplaceRegex, issuesKeys.length > 0 ? issuesLinksFormatted: 'No JIRA issues');
 }
 
 async function run() {
