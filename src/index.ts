@@ -2,7 +2,6 @@ import * as core from '@actions/core';
 import * as github from '@actions/github';
 
 interface Options {
-  issuePrefix: string;
   issueBaseUrl: string;
 }
 
@@ -10,11 +9,11 @@ const prBodyIssuesReplaceRegex = /\[\/\/]:\s?#\s?\(autolink_jira_issues_start\)[
 
 const extractIssuesKeysFromBranch = (prBranchName: string, options: Options) => {
   const [_prefix, _description, ...jiraIssues] = prBranchName.split('/');
-  return jiraIssues.filter((issue) => issue.startsWith(options.issuePrefix));
+  return jiraIssues;
 };
 
 const createIssueLink = (issueKey: string, issueBaseUrl: string) => {
-  return `${issueBaseUrl}/${issueKey}`;
+  return `[${issueKey}](${issueBaseUrl}/${issueKey})`;
 };
 
 function autolinkIssues(prBranchName: string, prBody: string | undefined, options: Options) {
@@ -38,13 +37,12 @@ async function run() {
 
     const githubApiToken: string = core.getInput('github-token');
     const issueBaseUrl = core.getInput('issue-base-url', { required: true });
-    const issuePrefix = core.getInput('issue-prefix', { required: true });
     const pullRquestBranchName = github.context.payload.pull_request.head.ref;
     const pullRequestBody = github.context.payload.pull_request?.body;
 
-    console.log(pullRequestBody);
-    const newBody = autolinkIssues(pullRquestBranchName, pullRequestBody, { issuePrefix, issueBaseUrl });
-    console.log(newBody);
+    const newBody = autolinkIssues(pullRquestBranchName, pullRequestBody, {
+      issueBaseUrl,
+    });
 
     const updateRequest = {
       owner: github.context.repo.owner,
