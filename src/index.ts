@@ -53,7 +53,15 @@ async function run() {
     console.log('Performing PR update request with parameters: ', updateRequest);
 
     const octokit = github.getOctokit(githubApiToken)
-    const response = await octokit.pulls.update(updateRequest);
+    let response;
+
+    try {
+      response = await octokit.pulls.update(updateRequest);
+    } catch (e) {
+      console.log('Failed to make a github API call for PR update');
+      core.error(e);
+      return;
+    }
 
     if (response.status !== 200) {
       core.error('Updating pull request has failed');
