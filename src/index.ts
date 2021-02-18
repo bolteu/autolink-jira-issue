@@ -34,7 +34,7 @@ async function run() {
       };
     }
 
-    const githubApiToken: string = core.getInput('github-token');
+    const githubApiToken: string = core.getInput('github-token', { required: true});
     const issueBaseUrl = core.getInput('issue-base-url', { required: true });
     const pullRquestBranchName = github.context.payload.pull_request.head.ref;
     const pullRequestBody = github.context.payload.pull_request?.body;
@@ -50,16 +50,14 @@ async function run() {
       body: newBody,
     };
 
-    const client = new github.GitHub(githubApiToken);
-    // @ts-ignore
-    const response = await client.pulls.update(updateRequest);
+    console.log('Performing PR update request with parameters: ', updateRequest);
+
+    const octokit = github.getOctokit(githubApiToken)
+    const response = await octokit.pulls.update(updateRequest);
 
     if (response.status !== 200) {
       core.error('Updating pull request has failed');
     }
-
-    const time = new Date().toTimeString();
-    core.setOutput('time', time);
   } catch (error) {
     core.setFailed(error.message);
   }
