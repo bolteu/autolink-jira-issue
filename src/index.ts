@@ -59,7 +59,7 @@ async function run() {
       response = await octokit.pulls.update(updateRequest);
     } catch (e) {
       console.log('Failed to make a github API call for PR update');
-      core.error(e);
+      core.setFailed(e);
       return;
     }
 
